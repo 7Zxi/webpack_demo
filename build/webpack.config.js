@@ -2,6 +2,7 @@ const path = require('path');
 const entry = require('./entry');
 const htmlPlugins = require('./plugin-html');
 const cssPlugins = require('./plugin-css');
+const WebpackSuccessUploadOSS = require('./upload-oss');
 const {sourcePath, mode, pageName} = require('../config/index');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
@@ -93,7 +94,7 @@ module.exports = {
                             limit: 8192, // 小于8k的图片自动转成base64格式，并且不会存在实体图片
                             outputPath: 'images/', // 图片打包后存放的目录
                             publicPath: sourcePath ? (sourcePath + '/images/') : '',
-                            name: '[name].[ext]'
+                            name: '[name]-[contenthash].[ext]'
                         }
                     }
                 ]
@@ -111,7 +112,7 @@ module.exports = {
                             limit: 8192,
                             outputPath: 'fonts/',
                             publicPath: sourcePath ? (sourcePath + '/fonts/') : '',
-                            name: '[name].[ext]'
+                            name: '[name]-[contenthash].[ext]'
                         }
                     }
                 ]
@@ -127,6 +128,8 @@ module.exports = {
 
     plugins: [
         new CleanWebpackPlugin(),
+
+        new WebpackSuccessUploadOSS(),
 
         new CopyWebpackPlugin(copyContent),
 
