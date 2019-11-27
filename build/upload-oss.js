@@ -8,7 +8,6 @@ class WebpackSuccessUploadOSS {
         compiler.hooks.done.tap('WebpackSuccessUploadOSS', (compilation, params) => {
             console.log('打包完成');
         })
-
     }
 }
 

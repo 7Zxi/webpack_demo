@@ -2,12 +2,9 @@ const path = require('path');
 const entry = require('./entry');
 const htmlPlugins = require('./plugin-html');
 const cssPlugins = require('./plugin-css');
-const WebpackSuccessUploadOSS = require('./upload-oss');
 const {sourcePath, mode, pageName} = require('../config/index');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const copyContent = require('./plugin-copy');
 
 module.exports = {
     devtool: "none",
@@ -100,10 +97,6 @@ module.exports = {
                 ]
             },
             {
-                test: /\.html$/,
-                use: ['html-withimg-loader']
-            },
-            {
                 test: /\.(eot|ttf|woff|svg)$/,
                 use: [
                     {
@@ -118,20 +111,43 @@ module.exports = {
                 ]
             },
             {
+                test: /\.(mp3|mp4)$/,
+                use: [
+                    {
+                        loader: "url-loader",
+                        options: {
+                            limit: 8192,
+                            outputPath: 'medias/',
+                            publicPath: sourcePath ? (sourcePath + '/medias/') : '',
+                            name: '[name]-[contenthash].[ext]'
+                        }
+                    }
+                ]
+            },
+            {
                 test: /\.js$/,
                 use: 'babel-loader',
                 include: /src/,          // 只转化src目录下的js
                 exclude: /node_modules/  // 排除掉node_modules，优化打包速度
+            },
+            {
+                test: /\.html$/,
+                use: ['html-withimg-loader']
+            },
+            {
+                test: /\.html$/,
+                use: [{
+                    loader: 'html-loader',
+                    options:{
+                        attrs: ['audio:src', 'video:src']
+                    }
+                }]
             }
         ]
     },
 
     plugins: [
         new CleanWebpackPlugin(),
-
-        new WebpackSuccessUploadOSS(),
-
-        new CopyWebpackPlugin(copyContent),
 
         ...cssPlugins,
 
@@ -141,8 +157,8 @@ module.exports = {
     devServer: {
         contentBase: './dist',
         host: 'localhost',
-        port: '3005',
-        open: false,
+        port: '3006',
+        open: true,
         openPage: `./${pageName}.html`,
         hot: true
     }
