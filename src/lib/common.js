@@ -1,1 +1,3 @@
-console.log('this is common js')
+if (module.hot && process.env.NODE_ENV === 'development') {
+    module.hot.accept();
+}

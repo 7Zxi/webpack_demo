@@ -1,19 +1,20 @@
 const path = require('path');
+const webpack = require('webpack');
 const entry = require('./entry');
 const htmlPlugins = require('./plugin-html');
 const cssPlugins = require('./plugin-css');
-const {sourcePath, mode, pageName} = require('../config/index');
+const {sourcePath, mode, pageName, devtool} = require('../config/index');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 module.exports = {
-    devtool: "none",
+    devtool,
 
-    mode: mode,
+    mode,
 
     stats: "errors-only",
 
-    entry: entry,
+    entry,
 
     output: {
         filename: "js/[name]-[hash].js",
@@ -138,7 +139,7 @@ module.exports = {
                 test: /\.html$/,
                 use: [{
                     loader: 'html-loader',
-                    options:{
+                    options: {
                         attrs: ['audio:src', 'video:src']
                     }
                 }]
@@ -151,11 +152,13 @@ module.exports = {
 
         ...cssPlugins,
 
-        ...htmlPlugins
+        ...htmlPlugins,
+
+        new webpack.HotModuleReplacementPlugin() //js热更新 配合入口文件module.hot.accept方法
+
     ],
 
     devServer: {
-        contentBase: './dist',
         host: 'localhost',
         port: '3006',
         open: true,

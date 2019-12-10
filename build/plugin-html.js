@@ -26,6 +26,8 @@ function createParams(pageName) {
             removeComments: true, //清理html中的注释
             collapseWhitespace: true //清理html中的空格、换行符
         }
+    }else{
+        params.chunks.unshift('lib/common');
     }
 
     return params;
