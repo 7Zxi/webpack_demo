@@ -1,9 +1,9 @@
 import 'style/common'
 import '../css/main.less'
 import Barrage from './barrage'
-if (module.hot && process.env.NODE_ENV === 'development') {
-    module.hot.accept();
-}
+
+module.hot && module.hot.accept();
+
 let data = [
     {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 5, color: 'red', speed: 1, fontSize: 22},
     {value: '想快快长大，才能保护她', time: 10, color: '#00a1f5', speed: 1, fontSize: 30},
@@ -158,4 +158,5 @@ canvas.addEventListener('click', e => {
         }
     })*/
 });
-console.log(222)
+
+console.log(process.env.NODE_ENV === 'development')

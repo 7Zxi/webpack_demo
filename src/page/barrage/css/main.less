@@ -21,6 +21,7 @@
   h1{
     font-family: woff;
     font-size:24px;
+    transform+_: scale(1);
   }
 }
 
@@ -28,3 +29,19 @@
   font-family: 'woff';
   src: url('../font/font.woff');
 }
+
+.margin(@i) when (@i=1){
+  margin-top:20px;
+}
+.li-style(@n,@i:1) when (@i =< @n){
+  .li-@{i}{
+    width:(@i*100%/@n);
+    height:100px;
+    background:#f0f + @i*50;
+    margin:0 auto;
+    .margin(@i);
+  }
+
+  .li-style(@n, (@i+1));
+}
+.li-style(4);

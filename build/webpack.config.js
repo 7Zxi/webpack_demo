@@ -162,7 +162,8 @@ module.exports = {
         host: 'localhost',
         port: '3006',
         open: true,
-        openPage: `./${pageName}.html`,
-        hot: true
+        //openPage: `./${pageName}.html`,
+        hot: true,
+        index: `${pageName}.html`
     }
 };
