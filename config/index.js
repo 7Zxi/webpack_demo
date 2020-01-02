@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-const PAGENAME = require('./pageName');
+const dotEnv = require('dotenv').config().parsed;
 const fileNameArray = fs.readdirSync(path.resolve('config/pageConf'));
 let config = {
-    pageName: PAGENAME,
+    pageName: dotEnv.PAGENAME,
     sourcePath: '',
     mode: process.env.NODE_ENV || 'development',
     devtool: process.env.NODE_ENV === 'development' ? 'inline-source-map' : ''

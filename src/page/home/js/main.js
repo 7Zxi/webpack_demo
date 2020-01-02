@@ -1,4 +1,3 @@
-import 'style/common';
 import 'lib/common';
 import '../css/home'
 import $ from 'jquery';

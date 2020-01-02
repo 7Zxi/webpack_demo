@@ -2,6 +2,7 @@
   "name": "webpack_demo",
   "version": "1.0.0",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "jquery": "^3.4.1",
     "zepto": "^1.2.0"
   },
