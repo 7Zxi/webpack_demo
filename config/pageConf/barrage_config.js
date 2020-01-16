@@ -1,3 +1,9 @@
 module.exports = {
-    sourcePath: ''
+    development: {
+        sourcePath: '',
+        api: 'www.egpic.cn'
+    },
+    production: {
+        sourcePath: ''
+    }
 };

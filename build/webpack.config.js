@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const entry = require('./entry');
 const htmlPlugins = require('./plugin-html');
 const cssPlugins = require('./plugin-css');
-const {sourcePath, mode, pageName, devtool} = require('../config/index');
+const {sourcePath, mode, pageName, devtool, webConf} = require('../config/index');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
@@ -154,14 +154,18 @@ module.exports = {
 
         ...htmlPlugins,
 
+        new webpack.DefinePlugin({//替换前端输出，前端可做线上线下接口环境区分。例：前端访问_config将替换成webConf
+            '_config': JSON.stringify(webConf)
+        }),
+
         new webpack.HotModuleReplacementPlugin() //js热更新 配合入口文件module.hot.accept方法
 
     ],
 
     devServer: {
         host: 'localhost',
-        port: '3006',
-        open: true,
+        port: '3007',
+        open: false,
         //openPage: `./${pageName}.html`,
         hot: true,
         index: `${pageName}.html`

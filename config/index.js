@@ -9,10 +9,14 @@ let config = {
     devtool: process.env.NODE_ENV === 'development' ? 'inline-source-map' : ''
 };
 
-if (config.mode === 'production' && config.pageName !== 'all') {
+if (config.pageName !== 'all') {
     if (fileNameArray.includes(`${config.pageName}_config.js`)) {
         const pageConfig = require(`./pageConf/${config.pageName}_config`);
-        config = {...config, ...pageConfig}
+        config = {
+            ...config,
+            sourcePath: pageConfig[config.mode].sourcePath,
+            webConf: pageConfig[config.mode]
+        }
     }
 }
 
