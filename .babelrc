@@ -1,6 +1,0 @@
-{
-  "presets": ["env", "stage-0"],   // 从右向左解析
-  "plugins": [
-    "transform-runtime" //Iterator、Generator、Set、Maps、Promise等等全局对象，以及一些定义在全局对象上的方法（比如Object.assign）的polyfill
-  ]
-}

@@ -36,6 +36,7 @@ module.exports = {
                     test: /\.js$/,
                     chunks: "initial",
                     name: 'utils', // 任意命名
+                    minChunks: 2,   // 被引用过两次才抽离
                     minSize: 0 // 只要超出0字节就生成一个新包
                 }
             }
@@ -127,7 +128,20 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                use: 'babel-loader',
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ["@babel/preset-env"],
+                        plugins: [
+                            [
+                                "@babel/plugin-transform-runtime",
+                                {
+                                    "corejs": 3
+                                }
+                            ]
+                        ]
+                    }
+                },
                 include: /src/,          // 只转化src目录下的js
                 exclude: /node_modules/  // 排除掉node_modules，优化打包速度
             },

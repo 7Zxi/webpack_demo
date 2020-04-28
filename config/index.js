@@ -6,7 +6,7 @@ let config = {
     pageName: dotEnv.PAGENAME,
     sourcePath: '',
     mode: process.env.NODE_ENV || 'development',
-    devtool: process.env.NODE_ENV === 'development' ? 'inline-source-map' : ''
+    devtool: process.env.NODE_ENV === 'development' ? 'cheap-module-eval-source-map' : ''
 };
 
 if (config.pageName !== 'all') {
