@@ -3,9 +3,10 @@ const webpack = require('webpack');
 const entry = require('./entry');
 const htmlPlugins = require('./plugin-html');
 const cssPlugins = require('./plugin-css');
-const {sourcePath, mode, pageName, devtool, webConf} = require('../config/index');
+const {sourcePath, mode, pageName, devtool, webConf, env} = require('../config/index');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const OSS = require('./upload-oss');
 
 module.exports = {
     devtool,
@@ -158,8 +159,9 @@ module.exports = {
             '_config': JSON.stringify(webConf)
         }),
 
-        new webpack.HotModuleReplacementPlugin() //js热更新 配合入口文件module.hot.accept方法
+        new webpack.HotModuleReplacementPlugin(), //js热更新 配合入口文件module.hot.accept方法
 
+        ...OSS
     ],
 
     devServer: {

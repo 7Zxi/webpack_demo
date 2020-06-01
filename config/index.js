@@ -6,6 +6,7 @@ let config = {
     pageName: dotEnv.PAGENAME,
     sourcePath: '',
     mode: process.env.NODE_ENV || 'development',
+    env: dotEnv,
     devtool: process.env.NODE_ENV === 'development' ? 'inline-source-map' : ''
 };
 

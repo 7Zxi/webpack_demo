@@ -1,14 +1,24 @@
-class WebpackSuccessUploadOSS {
-    apply(compiler) {
+const {mode, pageName, env} = require('../config/index');
+const WebpackAliyunOss = require('webpack-aliyun-oss');
+let OSS = [];
 
-        /*compiler.hooks.afterEmit.tap('WebpackSuccessUploadOSS', (compilation, params) => {
-            console.log('文件输出成功');
-        })*/
-
-        compiler.hooks.done.tap('WebpackSuccessUploadOSS', (compilation, params) => {
-            console.log('打包完成');
+if(mode === 'production'){
+    OSS = [
+        new WebpackAliyunOss({
+            from: ['./dist/**', '!./dist/**/*.html'],
+            dist: `${pageName}/`,
+            region: env.region,
+            accessKeyId: env.accessKeyId,
+            accessKeySecret: env.accessKeySecret,
+            bucket: env.bucket,
+            setOssPath(filePath) {
+                return filePath.split('dist\\')[1];
+            },
+            setHeaders(filePath){
+                return {'Cache-Control': 'max-age=31536000'}
+            }
         })
-    }
+    ]
 }
+module.exports = OSS;
 
-module.exports = WebpackSuccessUploadOSS;
