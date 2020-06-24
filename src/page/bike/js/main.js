@@ -1,11 +1,13 @@
+/*
 import 'style/common.mobile';
 import 'style/swiper.min';
 import 'style/animate.min';
 import 'style/animations';
 import '../css/main';
 import $ from 'lib/zepto.min';
-import Swiper from 'lib/swiper.min';
+import Swiper from 'lib/swiper.min';*/
 import {pageAdapter, animateCSS, addMusic, loading, createImage} from 'lib/publicMethod';
+
 
 module.hot && module.hot.accept();
 

@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const entry = require('./entry');
 const htmlPlugins = require('./plugin-html');
 const cssPlugins = require('./plugin-css');
-const {sourcePath, mode, pageName, devtool, webConf, env} = require('../config/index');
+const {sourcePath, mode, pageName, devtool, webConf} = require('../config/index');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const OSS = require('./upload-oss');
@@ -18,7 +18,8 @@ module.exports = {
     entry,
 
     output: {
-        filename: "js/[name]-[hash].js",
+        filename: "js/[name]-[hash:8].js",
+        chunkFilename: 'js/[name]-chunk[contenthash:8].js',
         path: path.resolve('dist'),
         publicPath: sourcePath
     },
@@ -45,11 +46,12 @@ module.exports = {
     },
 
     resolve: {
+        modules: [path.resolve('node_modules')],
         extensions: ['.js', '.less', '.css'],
         alias: {
             style: path.resolve(__dirname, '../src/style'),
             lib: path.resolve(__dirname, '../src/lib'),
-            publicImage: path.resolve(__dirname, '../src/image')
+            resource: path.resolve(__dirname, '../src/image')
         }
     },
 
@@ -94,7 +96,7 @@ module.exports = {
                             limit: 8192, // 小于8k的图片自动转成base64格式，并且不会存在实体图片
                             outputPath: 'images/', // 图片打包后存放的目录
                             publicPath: sourcePath ? (sourcePath + '/images/') : '',
-                            name: '[name]-[contenthash].[ext]'
+                            name: '[name]-[contenthash:8].[ext]'
                         }
                     }
                 ]
@@ -108,7 +110,7 @@ module.exports = {
                             limit: 8192,
                             outputPath: 'fonts/',
                             publicPath: sourcePath ? (sourcePath + '/fonts/') : '',
-                            name: '[name]-[contenthash].[ext]'
+                            name: '[name]-[contenthash:8].[ext]'
                         }
                     }
                 ]
@@ -122,7 +124,7 @@ module.exports = {
                             limit: 8192,
                             outputPath: 'medias/',
                             publicPath: sourcePath ? (sourcePath + '/medias/') : '',
-                            name: '[name]-[contenthash].[ext]'
+                            name: '[name]-[contenthash:8].[ext]'
                         }
                     }
                 ]
@@ -143,7 +145,7 @@ module.exports = {
                         ]
                     }
                 },
-                include: /src/,          // 只转化src目录下的js
+                include: path.resolve(__dirname, 'src'),// 只转化src目录下的js
                 exclude: /node_modules/  // 排除掉node_modules，优化打包速度
             },
             {
@@ -173,6 +175,11 @@ module.exports = {
             '_config': JSON.stringify(webConf)
         }),
 
+        new webpack.ProvidePlugin({ //向每个页面注入全局变量,不需要import或require导入
+           $: path.resolve(__dirname,'../src/lib/zepto.min.js'),
+           __publicMethod: path.resolve(__dirname,'../src/lib/publicMethod')
+        }),
+
         new webpack.HotModuleReplacementPlugin(), //js热更新 配合入口文件module.hot.accept方法
 
         ...OSS
@@ -182,6 +189,8 @@ module.exports = {
         host: 'localhost',
         port: '3007',
         open: false,
+        progress: true,
+        compress: true,
         //openPage: `./${pageName}.html`,
         hot: true,
         index: `${pageName}.html`

@@ -1,11 +1,14 @@
 import 'lib/common';
 import '../css/home'
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ from 'lib/zepto.min';
+import common from 'lib/common'
 
-console.log('this is home page');
+
+console.log('this is home page', __publicMethod);
 
 let image = document.createElement('img');
-image.src = require('publicImage/3.jpg');
+image.src = require('resource/3.jpg');
 document.body.appendChild(image);
 
 class Qzx {

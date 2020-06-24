@@ -6,7 +6,7 @@ let filename = '';
 
 if(mode === 'production'){
     opt = [new OptimizeCssAssetsPlugin()];
-    filename = 'css/[name]-[contenthash].css';
+    filename = 'css/[name]-[contenthash:8].css';
 }else{
     filename = 'css/[name].css';
 }

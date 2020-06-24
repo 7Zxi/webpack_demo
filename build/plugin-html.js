@@ -1,33 +1,28 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {pageName, mode} = require('../config/index');
-const fs = require('fs');
+const {mode} = require('../config/index');
 const path = require('path');
+const entry = require('./entry');
 let plugins = [];
 
-if (!pageName || pageName === 'all') {
-    fs.readdirSync(path.resolve('src/page')).forEach(value => {
-        plugins.push(new HtmlWebpackPlugin(createParams(value)));
-    })
-} else {
-    plugins.push(new HtmlWebpackPlugin(createParams(pageName)));
-}
+Object.keys(entry).forEach(data => {
+    let src = path.join(entry[data].split(data)[0],`${data}/index.html`);
+    plugins.push(new HtmlWebpackPlugin(createParams(src, data)));
+})
 
-function createParams(pageName) {
+function createParams(src, pageName) {
     let params = {
-        template: `./src/page/${pageName}/index.html`,
+        template: src,
         filename: `${pageName}.html`,
-        chunks: [pageName]
+        hash: true,
+        //cache: true,
+        chunks: ['vendor', 'utils', pageName]
     };
 
-    params.chunks.unshift('vendor', 'utils');
-
-    if(mode === 'production'){
+    if (mode === 'production') {
         params.minify = {
             removeComments: true, //清理html中的注释
             collapseWhitespace: true //清理html中的空格、换行符
         }
-    }else{
-        params.chunks.unshift('lib/common');
     }
 
     return params;

@@ -7,7 +7,7 @@ let config = {
     sourcePath: '',
     mode: process.env.NODE_ENV || 'development',
     env: dotEnv,
-    devtool: process.env.NODE_ENV === 'development' ? 'cheap-module-eval-source-map' : ''
+    devtool: process.env.NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : ''
 };
 
 if (config.pageName !== 'all') {
