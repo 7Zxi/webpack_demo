@@ -1,21 +1,26 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {mode} = require('../config/index');
+const {mode, pageName} = require('../config/index');
 const path = require('path');
 const entry = require('./entry');
 let plugins = [];
 
 Object.keys(entry).forEach(data => {
-    let src = path.join(entry[data].split(data)[0],`${data}/index.html`);
-    plugins.push(new HtmlWebpackPlugin(createParams(src, data)));
+    let template = path.join(entry[data].split(data)[0],`${data}/index.html`);
+    let dirPath = entry[data].split('\\');
+    let startIndex = dirPath.indexOf(pageName);
+    let endIndex = dirPath.indexOf('js');
+    let filename = `html/${dirPath.slice(startIndex, endIndex).join('/')}.html`;
+
+    plugins.push(new HtmlWebpackPlugin(createParams(template, filename, data)));
 })
 
-function createParams(src, pageName) {
+function createParams(template, filename, chunk) {
     let params = {
-        template: src,
-        filename: `${pageName}.html`,
-        hash: true,
+        template,
+        filename,
+        //hash: true,
         //cache: true,
-        chunks: ['vendor', 'utils', pageName]
+        chunks: ['vendor', 'utils', chunk]
     };
 
     if (mode === 'production') {

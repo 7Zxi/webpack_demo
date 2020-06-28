@@ -8,6 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const OSS = require('./upload-oss');
 
+
 module.exports = {
     devtool,
 
@@ -18,7 +19,7 @@ module.exports = {
     entry,
 
     output: {
-        filename: "js/[name]-[hash:8].js",
+        filename: 'js/[name]-[hash:8].js',
         chunkFilename: 'js/[name]-chunk[contenthash:8].js',
         path: path.resolve('dist'),
         publicPath: sourcePath
@@ -176,8 +177,8 @@ module.exports = {
         }),
 
         new webpack.ProvidePlugin({ //向每个页面注入全局变量,不需要import或require导入
-           $: path.resolve(__dirname,'../src/lib/zepto.min.js'),
-           __publicMethod: path.resolve(__dirname,'../src/lib/publicMethod')
+            $: path.resolve(__dirname, '../src/lib/zepto.min.js'),
+            __publicMethod: path.resolve(__dirname, '../src/lib/publicMethod')
         }),
 
         new webpack.HotModuleReplacementPlugin(), //js热更新 配合入口文件module.hot.accept方法
@@ -193,6 +194,6 @@ module.exports = {
         compress: true,
         //openPage: `./${pageName}.html`,
         hot: true,
-        index: `${pageName}.html`
+        //index: `html/${pageName}.html`
     }
 };
