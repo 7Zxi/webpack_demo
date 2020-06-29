@@ -6,10 +6,11 @@ let plugins = [];
 
 Object.keys(entry).forEach(data => {
     let template = path.join(entry[data].split(data)[0],`${data}/index.html`);
-    let dirPath = entry[data].split('\\');
-    let startIndex = dirPath.indexOf(pageName);
-    let endIndex = dirPath.indexOf('js');
-    let filename = `html/${dirPath.slice(startIndex, endIndex).join('/')}.html`;
+    //let dirPath = entry[data].split('\\');
+    //let startIndex = dirPath.indexOf(pageName);
+    //let endIndex = dirPath.indexOf('js');
+    //let filename = `html/${dirPath.slice(startIndex, endIndex).join('/')}.html`;
+    let filename = `${data}.html`;
 
     plugins.push(new HtmlWebpackPlugin(createParams(template, filename, data)));
 })

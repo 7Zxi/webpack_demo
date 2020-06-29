@@ -5,7 +5,7 @@ const fileNameArray = fs.readdirSync(path.resolve('config/pageConf'));
 
 let config = {
     pageName: dotEnv.PAGENAME,
-    sourcePath: 'http://127.0.0.1:3007',
+    sourcePath: '',
     mode: process.env.NODE_ENV || 'development',
     env: dotEnv,
     devtool: process.env.NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : ''

@@ -187,13 +187,13 @@ module.exports = {
     ],
 
     devServer: {
-        host: 'localhost',
+        host: '0.0.0.0',
         port: '3007',
         open: false,
         progress: true,
         compress: true,
         //openPage: `./${pageName}.html`,
         hot: true,
-        //index: `html/${pageName}.html`
+        index: `${pageName}.html`
     }
 };

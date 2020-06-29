@@ -9,10 +9,10 @@ console.log(`当前环境：${mode}`);
 console.log('打包入口：');
 
 if(pageName && pageName !== 'all'){
-    startPath = path.resolve(`./src/page/${pageName}`);
+    startPath = path.resolve(`src/page/${pageName}`);
     addEntry(startPath, pageName);
 }else{
-    startPath = path.resolve('./src/page')
+    startPath = path.resolve('src/page')
     addEntry(startPath);
 }
 
