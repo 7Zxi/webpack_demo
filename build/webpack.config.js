@@ -135,7 +135,10 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ["@babel/preset-env"],
+                        presets: [
+                            // 配置polyfill转换低版本浏览器不支持的api：promise、includes...
+                            ["@babel/preset-env", {useBuiltIns: 'usage'}]
+                        ],
                         plugins: [
                             [
                                 "@babel/plugin-transform-runtime",

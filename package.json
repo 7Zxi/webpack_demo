@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@babel/polyfill": "^7.10.4",
     "@babel/preset-env": "^7.9.5",
     "autoprefixer": "^9.7.0",
     "babel-loader": "^8.1.0",

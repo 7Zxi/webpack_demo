@@ -28,7 +28,6 @@ function addEntry(src, param) {
                 let jsPath = path.join(src, '/js/main.js');
                 if(glob.sync(jsPath).length > 0){
                     entry[param] = jsPath;
-                    console.log(jsPath);
                 }else{
                     console.log(`${param}页面 请添加入口main.js文件`)
                 }
@@ -40,5 +39,7 @@ function addEntry(src, param) {
         }
     })
 }
+
+console.log(entry);
 
 module.exports = entry;
