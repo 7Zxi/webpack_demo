@@ -2,16 +2,14 @@
   "name": "webpack_demo",
   "version": "1.0.0",
   "dependencies": {
-    "@babel/plugin-transform-runtime": "^7.10.1",
-    "@babel/runtime": "^7.10.2",
-    "@babel/runtime-corejs3": "^7.9.2",
+    "@babel/runtime-corejs3": "^7.10.5",
     "dotenv": "^8.2.0",
     "jquery": "^3.5.1",
     "zepto": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@babel/polyfill": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.10.5",
     "@babel/preset-env": "^7.9.5",
     "autoprefixer": "^9.7.0",
     "babel-loader": "^8.1.0",
