@@ -1,21 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
+const {sourcePath, webConf} = require('../config/index');
 const entry = require('./entry');
 const htmlPlugins = require('./plugin-html');
-const cssPlugins = require('./plugin-css');
-const {sourcePath, mode, pageName, devtool, webConf} = require('../config/index');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
-const OSS = require('./upload-oss');
-
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    devtool,
-
-    mode,
-
-    stats: "errors-only",
-
     entry,
 
     output: {
@@ -23,27 +14,6 @@ module.exports = {
         chunkFilename: 'js/[name]-chunk[contenthash:8].js',
         path: path.resolve('dist'),
         publicPath: sourcePath
-    },
-
-    // 提取公共代码
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                vendor: { //抽离第三方插件
-                    test: /node_modules/, //指定是node_modules下的第三方包
-                    chunks: "initial",
-                    name: 'vendor', //打包后的文件名，任意命名
-                    priority: 10 //设置优先级，防止和自定义的公共代码提取时被覆盖，不进行打包
-                },
-                utils: { //抽离自己写的公共代码，utils这个名字可以随意起
-                    test: /\.js$/,
-                    chunks: "initial",
-                    name: 'utils', // 任意命名
-                    minChunks: 2,   // 被引用过两次才抽离
-                    minSize: 0 // 只要超出0字节就生成一个新包
-                }
-            }
-        }
     },
 
     resolve: {
@@ -60,11 +30,7 @@ module.exports = {
         rules: [
             {
                 test: /\.(css|less)$/,
-                //use:[MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
                 use: [
-                    {
-                        loader: "css-hot-loader"
-                    },
                     {
                         loader: MiniCssExtractPlugin.loader,//还需要在plugins里面new一下
                         options: {
@@ -168,10 +134,10 @@ module.exports = {
         ]
     },
 
+    stats: "errors-only",
+
     plugins: [
         new CleanWebpackPlugin(),
-
-        ...cssPlugins,
 
         ...htmlPlugins,
 
@@ -184,19 +150,5 @@ module.exports = {
             __publicMethod: path.resolve(__dirname, '../src/lib/publicMethod')
         }),
 
-        new webpack.HotModuleReplacementPlugin(), //js热更新 配合入口文件module.hot.accept方法
-
-        ...OSS
     ],
-
-    devServer: {
-        host: '0.0.0.0',
-        port: '3007',
-        open: false,
-        progress: true,
-        compress: true,
-        //openPage: `./${pageName}.html`,
-        hot: true,
-        index: `${pageName}.html`
-    }
-};
+}

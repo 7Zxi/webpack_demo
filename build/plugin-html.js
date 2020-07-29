@@ -1,5 +1,4 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {mode, pageName} = require('../config/index');
 const path = require('path');
 const entry = require('./entry');
 let plugins = [];
@@ -21,10 +20,11 @@ function createParams(template, filename, chunk) {
         filename,
         //hash: true,
         //cache: true,
-        chunks: ['vendor', 'utils', chunk]
+        chunks: [chunk]
     };
 
-    if (mode === 'production') {
+    if (process.env.NODE_ENV === 'production') {
+        params.unshift('vendor', 'utils');
         params.minify = {
             removeComments: true, //清理html中的注释
             collapseWhitespace: true //清理html中的空格、换行符

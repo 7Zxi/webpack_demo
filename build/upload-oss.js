@@ -1,8 +1,8 @@
-const {mode, pageName, env} = require('../config/index');
+const {pageName, env} = require('../config/index');
 const WebpackAliyunOss = require('webpack-aliyun-oss');
 let OSS = [];
 
-if(mode === 'production' && env.bucket && pageName !== 'all'){
+if(process.env.NODE_ENV === 'production' && env.bucket && pageName !== 'all'){
     OSS = [
         new WebpackAliyunOss({
             from: ['./dist/**', '!./dist/**/*.html'],
