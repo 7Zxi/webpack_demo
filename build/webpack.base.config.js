@@ -124,12 +124,15 @@ module.exports = {
             },
             {
                 test: /\.html$/,
-                use: [{
-                    loader: 'html-loader',
-                    options: {
-                        attrs: ['audio:src', 'video:src']
+                use: [
+                    'html-withimg-loader',
+                    {
+                        loader: 'html-loader',
+                        options: {
+                            attrs: ['audio:src', 'video:src']
+                        }
                     }
-                }]
+                ]
             }
         ]
     },

@@ -162,4 +162,3 @@ canvas.addEventListener('click', e => {
     })*/
 });
 
-console.log(process.env.NODE_ENV === 'development')

@@ -25,6 +25,7 @@ function createParams(template, filename, chunk) {
 
     if (process.env.NODE_ENV === 'production') {
         params.chunks.unshift('vendor', 'utils');
+        params.hash = true;
         params.minify = {
             removeComments: true, //清理html中的注释
             collapseWhitespace: true //清理html中的空格、换行符
