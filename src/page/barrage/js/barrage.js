@@ -8,7 +8,7 @@ export default class Barrage {
         this.ctx = ctx;
     }
 
-    init() {
+    init(cachePrevIndex = 0) {
         // 如果数据里没有涉及到下面4种参数，就直接取默认参数
         this.color = this.data.color || this.ctx.color;
         this.speed = this.data.speed || this.ctx.speed;
@@ -24,20 +24,31 @@ export default class Barrage {
 
         //设置弹幕出现的位置
         this.x = this.ctx.canvas.width;
-        this.y = this.ctx.canvas.height * Math.random();
+        const getYCoordinate = (cachePrevIndex) => {
+            let heightBlock = this.ctx.canvas.height / 10;
+            let index = Math.floor(Math.random() * 10);
+            let y = index * heightBlock + (heightBlock - this.height) / 2;
+            if (index === cachePrevIndex) {
+                return getYCoordinate(cachePrevIndex);
+            } else {
+                return {y, index};
+            }
+        };
+        let {y, index} = getYCoordinate(cachePrevIndex);
+        this.y = y;
 
         //做下超出范围处理
         if (this.y < this.fontSize) {
             this.y = this.fontSize;
-        }
-        else if (this.y > this.ctx.canvas.height - this.fontSize) {
+        } else if (this.y > this.ctx.canvas.height - this.fontSize) {
             this.y = this.ctx.canvas.height - this.fontSize;
         }
 
+        return index;
     }
 
     //渲染每个弹幕
-    render(){
+    render() {
         // 设置画布文字的字号和字体
         this.ctx.ctx.font = `${this.fontSize}px woff`;
         // 设置画布文字颜色

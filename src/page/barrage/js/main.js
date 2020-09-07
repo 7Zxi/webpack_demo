@@ -4,13 +4,39 @@ import Barrage from './barrage'
 
 module.hot && module.hot.accept();
 
-console.log(_config);
-
 let data = [
-    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 5, color: 'red', speed: 1, fontSize: 22},
-    {value: '想快快长大，才能保护她', time: 10, color: '#00a1f5', speed: 1, fontSize: 30},
-    {value: '听妈妈的话吧，晚点再恋爱吧！爱呢？', time: 15},
-    {value: '听妈妈的话吧，晚点再恋爱吧！爱呢11？', time: 30},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 1, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 1, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '周杰伦的听妈妈的话，让我反复循环再循环', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: 'qzx', time: 3, color: 'red', speed: 1, fontSize: 22},
+    {value: '想快快长大，才能保护她', time: 5, color: '#00a1f5', speed: 1, fontSize: 30},
+    {value: '听妈妈的话吧，晚点再恋爱吧！爱呢？', time: 7},
+    {value: '听妈妈的话吧，晚点再恋爱吧！爱呢11？', time: 9},
 ];
 let canvas = document.getElementById('canvas');
 let video = document.getElementById('video');
@@ -48,6 +74,14 @@ class CanvasBarrage {
         // 得到所有的弹幕消息
         this.barrages = this.data.map(item => new Barrage(item, this));
 
+        // 把画布高度均分，避免弹幕遮挡
+        this.averageCanvas = [];
+
+        // 缓存上一条弹幕渲染的管道index
+        this.cachePrevIndex = null;
+
+        // 每条弹幕x轴坐标的间隔距离
+        this.distanceX = 20;
     }
 
     // 渲染canvas绘制的弹幕
@@ -67,41 +101,74 @@ class CanvasBarrage {
     renderBarrage() {
         // 首先拿到当前视频播放的时间
         // 要根据该时间来和弹幕要展示的时间做比较，来判断是否展示弹幕
-        let time = this.video.currentTime;
+        const time = this.video.currentTime;
 
         //遍历所有的弹幕，每个barrage都是Barrage的实例
-        this.barrages.forEach((barrage, index) => {
-            // 用一个flag来处理是否渲染，默认是false
-            // 并且只有在视频播放时间大于等于当前弹幕的展现时间时才做处理
-            if (!barrage.flag && time >= barrage.time) {
-                // 判断当前弹幕是否有过初始化了
-                // 如果isInit还是false，那就需要先对当前弹幕进行初始化操作
-                if (!barrage.isInit) {
-                    barrage.init();
-                    barrage.isInit = true;
-                }
+        this.barrages.forEach(barrage => {
 
-                // 弹幕要从右向左渲染，所以x坐标减去当前弹幕的speed即可
-                barrage.x -= barrage.speed;
-                barrage.render();
+            if (!barrage.isInit && time >= barrage.time) {
+                // 获取当前弹幕需要渲染的管道index
+                const index = barrage.init(this.cachePrevIndex);
+                // 缓存当前弹幕的index，用于保证下一条弹幕不在当前管道中
+                this.cachePrevIndex = index;
+                // 弹幕压入管道中
+                this.averageCanvas[index] = this.averageCanvas[index] || [];
+                this.averageCanvas[index].push(barrage);
 
-                // 如果当前弹幕的x坐标比自身的宽度还小了，就表示结束渲染了
-                barrage.flag = barrage.x < -barrage.width
+                barrage.isInit = true;
             }
+
         })
+
+        // 渲染管道中的弹幕
+        this.renderAverageBarrage();
     }
 
-    replay(){
+    renderAverageBarrage() {
+        this.averageCanvas.forEach(barrageItems => {
+            if (barrageItems.length > 0) {
+                for (let i = 0; i < barrageItems.length; i++) {
+                    let barrage = barrageItems[i];
+                    if (i === 0) {
+                        if (barrage.flag) {
+                            barrageItems.splice(i, 1);
+                        } else {
+                            render(barrage)
+                        }
+                    } else {
+                        let prevBarrage = barrageItems[i - 1];
+                        let prevBarrageMoveDistance = prevBarrage.ctx.canvas.width - prevBarrage.x - prevBarrage.width;
+                        if (prevBarrageMoveDistance >= this.distanceX) {
+                            render(barrage);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        function render(barrage) {
+            // 弹幕要从右向左渲染，所以x坐标减去当前弹幕的speed即可
+            barrage.x -= barrage.speed;
+            barrage.render();
+
+            // 如果当前弹幕的x坐标比自身的宽度还小了，就表示结束渲染了
+            barrage.flag = barrage.x < -barrage.width;
+        }
+    }
+
+    replay() {
         this.clear(); //先清除画布
         // 获取当前视频播放时间
         let time = this.video.currentTime;
 
-        this.barrages.forEach( barrage => {
+        this.barrages.forEach(barrage => {
 
-            if(barrage.time >= time){ // 就把isInit重设为false，这样才会重新初始化渲染
+            if (barrage.time >= time) { // 就把isInit重设为false，这样才会重新初始化渲染
                 barrage.isInit = false;
                 barrage.flag = false;// 当前弹幕的flag设为false
-            }else{
+            } else {
                 barrage.flag = true; // 其他时间对比不匹配的，flag还是true不用重新渲染
             }
         })

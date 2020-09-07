@@ -14,7 +14,7 @@ module.exports = smart(baseConfig, {
         host: '0.0.0.0',
         port: '3007',
         open: false,
-        progress: true, // 打包进度显示
+        //progress: true, // 打包进度显示
         compress: true, // 打包压缩文件
         overlay: true, // 在页面上显示编译的错误
         //openPage: `./${pageName}.html`,
