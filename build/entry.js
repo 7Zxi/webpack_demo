@@ -1,11 +1,11 @@
 const glob = require('glob');
 const fs = require('fs');
 const path = require('path');
-const {pageName, mode} = require('../config/index');
+const {pageName} = require('../config/index');
 let entry = {};
 let startPath = null;
 
-console.log(`当前环境：${mode}`);
+console.log(`当前环境：${process.env.NODE_ENV}`);
 console.log('打包入口：');
 
 if(pageName && pageName !== 'all'){

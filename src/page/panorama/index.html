@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>全景demo</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="360-fullscreen" content="true">
+    <meta name="full-screen" content="true">
+    <meta name="x5-fullscreen" content="true">
+</head>
+<body class="visibility">
+
+<div class="interior hide">
+    <img src="./image/close.png" title="关闭" class="pano-close">
+    <div id="pano" class="visibility"></div>
+</div>
+
+
+<div id="container" class="">
+
+    <div class="product-title theSame">君威 以雕塑美学 诠释潮流 </div>
+
+    <div class="group theSame">
+        <img src="./image/edit.png" title="提交意见或问题" class="edit-btn">
+        <img src="./image/share.png" title="分享" class="share-btn">
+        <img src="./image/see.png" title="屏蔽信息" class="view-btn">
+        <img src="./image/close_eye.png" title="打开信息" class="hidden-btn">
+    </div>
+
+    <ul class="three-sixty theSame">
+
+    </ul>
+
+    <div class="theSame">
+        <div class="topic-switch">
+            <ul class="switch-items"></ul>
+            <div class="effect-btn">
+                <img src="./image/arrow.png">
+                <span>效果</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 建议弹出框 -->
+    <div class="feedback hide">
+        <div class="feed-con">
+            <textarea  rows="6" class="feedback-text" placeholder="请在此输入您的问题和建议"></textarea>
+            <div class="btn-bar">
+                <div class="confirm-commit">确认提交</div>
+                <div class="cancel-commit">取消提交</div>
+            </div>
+        </div>
+    </div>
+
+    <!--切换汽车时的过渡-->
+    <div class="switch-load hide">
+        <img src="./image/loading.svg">
+    </div>
+
+    <div class="loading"></div>
+
+</div>
+
+<!--分享弹框-->
+<div class="j-share hide">
+    <div class="share-box">
+        <ul class="share-items">
+            <li>
+                <a href="https://service.weibo.com/widget/public/login.php?source=share&backurl=https%3A%2F%2Fservice.weibo.com%2Fshare%2Fmobile.php%3Fappkey%3D1035238687%26title%3D%25E6%25B1%25BD%25E8%25BD%25A6%25E4%25B9%258B%25E5%25AE%25B6-%25E5%2585%25A8%25E6%2599%25AF%25E7%259C%258B%25E8%25BD%25A6-%25E6%259C%25AC%25E7%2594%25B0CR-V%2B%26url%3Dhttps%253A%252F%252Fpano.autohome.com.cn%252Fcar%252Fext%252F46350%253Fsrc%253Dshare%2526auid%253D7B6896A9-48C3-4157-90B4-1FE2BB5409B8%26pic%3Dhttps%253A%252F%252Fimg3.autoimg.cn%252Fpano%252Fg27%252FM09%252FF4%252F0E%252F400x0_autohomecar__ChwFkV8OsSeAQY8uAACMBW758AI549.jpg%26ralateUid%3D1761731257%26frefer%3D">
+                    <img src="./image/wb.png">
+                    <p>新浪微博</p>
+                </a>
+            </li>
+            <li>
+                <a href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https%3A%2F%2Fpano.autohome.com.cn%2Fcar%2Fext%2F46350%3Fsrc%3Dshare%26auid%3D7B6896A9-48C3-4157-90B4-1FE2BB5409B8&title=%E6%B1%BD%E8%BD%A6%E4%B9%8B%E5%AE%B6-%E5%85%A8%E6%99%AF%E7%9C%8B%E8%BD%A6-%E6%9C%AC%E7%94%B0CR-V&pics=https%3A%2F%2Fimg3.autoimg.cn%2Fpano%2Fg27%2FM09%2FF4%2F0E%2F400x0_autohomecar__ChwFkV8OsSeAQY8uAACMBW758AI549.jpg&summary=">
+                    <img src="./image/qq.png">
+                    <p>QQ空间</p>
+                </a>
+            </li>
+            <li class="share-pyq">
+                <a href="javascript:;">
+                    <img src="./image/pyq.png">
+                    <p>微信朋友圈</p>
+                </a>
+            </li>
+        </ul>
+        <div class="cancel-btn">取消</div>
+    </div>
+</div>
+
+
+<script src="http://static-business.eg365.cn/pano/js/interior.js"></script>
+</body>
+
+</html>
