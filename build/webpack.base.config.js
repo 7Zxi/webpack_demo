@@ -149,8 +149,8 @@ module.exports = {
         }),
 
         new webpack.ProvidePlugin({ //向每个页面注入全局变量,不需要import或require导入
-            $: path.resolve(__dirname, '../src/lib/zepto.min.js'),
-            __publicMethod: path.resolve(__dirname, '../src/lib/publicMethod')
+            $: [path.resolve(__dirname, '../src/lib/zepto.min'), 'default'],
+            __publicMethod: [path.resolve(__dirname, '../src/lib/publicMethod'), 'default'],
         }),
 
     ],
