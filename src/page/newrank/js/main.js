@@ -91,7 +91,7 @@ const mock = {
             nickname: '黄小敏● 12点极光轻奢女装！震撼来袭！',
             uid: '540597062470539',
             avatar: 'https://p6-dy-ipv6.byteimg.com/img/tos-cn-avt-0015/ad96602b26f00261c4799bfdae8d20da~c5_1080x1080.jpeg?from=4010531038',
-            period: [5236, 23435, 12345, 23445, 76868, 333456, 24355, 76834, 23345, 346544, 234535, 234234, 32456, 23432, 45456, 235633, 345464, 453445, 23455, 123445, 435235,34525, 423454, 45456],
+            period: [5236, 23435, 12345, 23445, 76868, 333456, 24355, 76834, 23345, 11346544, 234535, 234234, 32456, 23432, 45456, 235633, 345464, 453445, 23455, 123445, 435235,34525, 423454, 45456],
             current: 0
         },
         {
@@ -189,50 +189,61 @@ const mock = {
 }
 
 
-$.ajax({
-    type: 'POST',
-    url: 'https://capi.newrank.cn/api/custom/double11/xd_live',
-    data: {rankDate: (+new Date()/1000).toFixed()},
-    headers: {
-        'key': 'v5e7f279c135f473bbbdattuo'
-    },
-    success(data) {
 
-        let mock = {
-            singleItems: []
+
+window.onload = function(){
+    $.ajax({
+        type: 'POST',
+        url: 'https://capi.newrank.cn/api/custom/double11/xd_live',
+        data: {rankDate: parseInt(+new Date()/1000) - 24*60*60},
+        headers: {
+            'key': 'v5e7f279c135f473bbbdattuo'
+        },
+        success(data) {
+            let mock = {
+                singleItems: []
+            };
+
+            if (Array.isArray(data.data)) {
+                data.data.forEach(value => {
+                    let info = {
+                        period: []
+                    };
+
+                    info.nickname = value.nickname;
+                    info.avatar = value.avater;
+                    info.uid = value.uid;
+                    info.current = 0;
+                    value.today.forEach(({sales_money}) => {
+                        info.period.push(sales_money)
+                    });
+                    if(info.uid === "96285518522"){
+                        mock.singleItems.unshift(info);
+                    }else{
+                        mock.singleItems.push(info);
+                    }
+                })
+            }
+
+            const business = new Business(mock);
+            business.init();
+            loading($('img'), num => {
+                console.log('页面元素加载完毕');
+                business.start();
+                //num=== 100 && business.start();
+            },true)
+
+            console.log(mock)
         }
-        if (Array.isArray(data.data)) {
-
-            data.data.forEach(value => {
-                let info = {
-                    period: []
-                };
-
-                info.nickname = value.nickname;
-                info.avatar = value.avater;
-                info.uid = value.uid;
-                info.current = 0;
-                value.today.forEach(({sales_money}) => {
-                    info.period.push(sales_money)
-                });
-                if(info.uid === "96285518522"){
-                    mock.singleItems.unshift(info);
-                }else{
-                    mock.singleItems.push(info);
-                }
-            })
-        }
-
-        console.log(mock)
-    }
-})
+    })
+}
 
 
-const business = new Business(mock);
+/*const business = new Business(mock);
 business.init();
 loading($('img'), num => {
     console.log(num)
     business.start();
-}, true)
+}, true)*/
 
 

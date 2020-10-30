@@ -29,7 +29,9 @@ export default class Business {
         this.axisWidth = $('.mark').width();
 
         // 轴线区间
-        this.axisPeriod = null;
+        this.axisPeriod = [];
+
+        this.maxShadowWidth = this.axisWidth * .65;
 
     }
 
@@ -43,19 +45,26 @@ export default class Business {
             this.axisPeriod = [5000000];
             let complement = parseInt(maxTransactionValue / 10000000);
             for (let i = 1; i <= complement; i++) {
-                this.axisPeriod.push(i * 10000000);
+                if (i > 10) {
+                    this.axisPeriod.push(5 * 10000000 + (i - 1) * 10000000);
+                    i += 4;
+                } else {
+                    this.axisPeriod.push(i * 10000000);
+                }
             }
             this.maxTransactionValue = 5000000;
         } else {
             this.maxTransactionValue = maxTransactionValue;
         }
 
-        console.log('区间:', this.maxTransactionValue);
+        console.log('区间:', this.axisPeriod);
         console.log('y坐标:', this.yAxis);
         console.log(this.data.singleItems);
+
     }
 
     start() {
+        console.log('计时开始')
         console.time('计时结束');
         this.updateRank(this.updateNumber, true);
     }
@@ -83,35 +92,42 @@ export default class Business {
             let y, background;
             if (index >= this.maxShowRank) {
                 y = 0;
-                background = '#fff';
+                background = "#FF7909";
             } else {
                 y = this.yAxis[index].y;
                 background = this.yAxis[index].background;
             }
 
-            const width = `${(item.current / this.maxTransactionValue * this.axisWidth).toFixed()}px`;
+            // range样式插入
             const $el = $(`li[data-uid="${item.uid}"]`);
-            let prevIndex = $el.attr('data-index');
-            if (prevIndex) {
-                prevIndex = parseInt(prevIndex)
-                if (index - prevIndex >= 10) {
-                    this.rankLiftUp($el, 'down', prevIndex, index)
+            $el.attr('data-index', index).css('transform', `translateY(${y}px)`);
+            if (index < 22) {
+                this.changeAxis(this.maxTransactionValue);
+                const width = `${(item.current / this.maxTransactionValue * this.axisWidth).toFixed()}px`;
+                let prevIndex = $el.attr('data-index');
+                if (prevIndex) {
+                    prevIndex = parseInt(prevIndex)
+                    if (index - prevIndex >= 10) {
+                        this.rankLiftUp($el, 'down', prevIndex, index)
+                    }
+                    if (index - prevIndex <= -10) {
+                        this.rankLiftUp($el, 'up', index, prevIndex);
+                    }
                 }
-                if (index - prevIndex <= -10) {
-                    this.rankLiftUp($el, 'up', index, prevIndex);
+
+                $el.find('.range').removeClass('tran').css({
+                    width,
+                    background,
+                });
+                $el.find('.number span').html(`${(item.current / 10000).toFixed(2)}`);
+                if (item.current > 100000000) {
+                    $el.find('.number').html(`<span>${(item.current / 100000000).toFixed(4)}</span>亿`);
                 }
             }
 
-            $el.attr('data-index', index).css('transform', `translateY(${y}px)`);
-            $el.find('.range').css({
-                width,
-                background,
-            });
-            $el.find('.number span').html(`${(item.current / 10000).toFixed(2)}`);
-            if (item.current > 100000000) {
-                $el.find('.number')
+            if ((item.current / this.maxTransactionValue * this.axisWidth) >= this.maxShadowWidth && index === 14) {
+                this.maxTransactionValue *= 1.1;
             }
-            this.changeAxis(this.maxTransactionValue);
         })
     }
 
@@ -245,11 +261,11 @@ export default class Business {
     // 实时更新榜单数据
     updateRank(count, bool) {
         if (count > 0) {
-            if(bool){
+            if (bool) {
                 this.changeRankListCurrent();
                 count--;
                 this.updateRank(count);
-            }else{
+            } else {
                 let timer = setTimeout(() => {
                     clearTimeout(timer);
                     timer = null;
@@ -263,7 +279,7 @@ export default class Business {
             this.currentHour++;
             if (this.currentHour <= 24) {
                 this.updateRank(this.updateNumber, true);
-            }else{
+            } else {
                 console.timeEnd('计时结束');
             }
         }
@@ -271,9 +287,10 @@ export default class Business {
 
     // 设置当前时间
     setNowTime() {
-        const year = new Date().getFullYear();
-        const month = new Date().getMonth();
-        const day = new Date().getDate();
+        const time = +new Date() - 24*60*60*1000;
+        const year = new Date(time).getFullYear();
+        const month = new Date(time).getMonth();
+        const day = new Date(time).getDate();
 
         $('.year').html(year);
         $('.month').html(month + 1);
