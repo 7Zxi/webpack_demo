@@ -1,4 +1,4 @@
-(function () {
+export default(function () {
     var _publicMethod = {
 
         //页面适配
@@ -229,8 +229,7 @@
                     if (imgWidth > imgHeight && imgWidth > 750) {
                         imgWidth = 750;
                         imgHeight = Math.ceil(750 * this.height / this.width);
-                    }
-                    else if (imgWidth < imgHeight && imgHeight > 1334) {
+                    } else if (imgWidth < imgHeight && imgHeight > 1334) {
                         imgWidth = Math.ceil(1334 * this.width / this.height);
                         imgHeight = 1334;
                     }
@@ -405,7 +404,7 @@
         },
 
         //移动端横屏
-        detectOrient: function (className,callback) {
+        detectOrient: function (className, callback) {
             var container = document.querySelector(className);
             setDomStyle();
 
@@ -413,10 +412,10 @@
                 setDomStyle();
             });
 
-            window.addEventListener('orientationchange', ()=>{
-                if(window.orientation === 0){
+            window.addEventListener('orientationchange', () => {
+                if (window.orientation === 0) {
                     callback && callback.call(null, 'vertical');
-                }else{
+                } else {
                     callback && callback.call(null, 'horizontal');
                 }
             });
@@ -424,12 +423,12 @@
             function setDomStyle() {
                 if (window.innerWidth <= window.innerHeight) {
                     commonMethod.domAddStyle(container, getStyle());
-                }else{
+                } else {
                     callback && callback.call(null, 'horizontal');
                 }
             }
 
-            function getStyle(){
+            function getStyle() {
                 return {
                     transformOrigin: window.innerWidth / 2 + "px " + window.innerWidth / 2 + "px",
                     transform: 'rotate(90deg)',
@@ -503,27 +502,30 @@
 
         //添加动画
         animateCSS: function (node, animationName, callback) {
-            if (typeof node === 'string') {
-                node = document.querySelector(node);
-            }
-
-            if (typeof animationName === 'string') {
-                if(animationName.indexOf(',')>-1){
-                    animationName = animationName.split(',');
-                }else{
-                    animationName = animationName.split(' ');
+            return new Promise(resolve => {
+                if (typeof node === 'string') {
+                    node = document.querySelector(node);
                 }
-            }
-            animationName.push('animated');
-            node.classList.add.apply(node.classList, animationName);
 
-            function handleAnimationEnd() {
-                node.classList.remove.apply(node.classList, animationName);
-                node.removeEventListener('animationend', handleAnimationEnd);
-                callback && callback();
-            }
+                if (typeof animationName === 'string') {
+                    if (animationName.indexOf(',') > -1) {
+                        animationName = animationName.split(',');
+                    } else {
+                        animationName = animationName.split(' ');
+                    }
+                }
+                animationName.push('animated');
+                node.classList.add.apply(node.classList, animationName);
 
-            node.addEventListener('animationend', handleAnimationEnd);
+                function handleAnimationEnd() {
+                    node.classList.remove.apply(node.classList, animationName);
+                    node.removeEventListener('animationend', handleAnimationEnd);
+                    callback && callback();
+                    resolve();
+                }
+
+                node.addEventListener('animationend', handleAnimationEnd);
+            });
         },
 
         //创建图片对象
@@ -543,28 +545,28 @@
         },
 
         //移动端输入框弹出软键盘影响定位处理
-        insertStyle: function(){
+        insertStyle: function () {
             var insert = document.querySelectorAll('input,textarea');
-            insert.forEach(function(value){
+            insert.forEach(function (value) {
                 addEvent(value);
             });
-            function addEvent(eventObj){
-                eventObj.addEventListener('blur', function(){
+
+            function addEvent(eventObj) {
+                eventObj.addEventListener('blur', function () {
                     setTimeout(function () {
-                        window.scrollTo(0,0);
+                        window.scrollTo(0, 0);
                     })
                 })
             }
         },
 
         //获取URL的参数：type: hash || search
-        getURLParams: function(type){
+        getURLParams: function (type) {
             var codeArr = null;
             var hashObj = {};
-            if(type === 'search'){
+            if (type === 'search') {
                 codeArr = window.location.search && window.location.search.split('?')[1].split('&');
-            }
-            else if(type === 'hash'){
+            } else if (type === 'hash') {
                 codeArr = window.location.hash && window.location.hash.split('#')[1].split('&');
             }
 
@@ -639,4 +641,6 @@
     } else {
         window._publicMethod = _publicMethod;
     }
+
+    return _publicMethod;
 })();
