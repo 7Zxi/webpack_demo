@@ -60,7 +60,6 @@ export default class Business {
         console.log('区间:', this.axisPeriod);
         console.log('y坐标:', this.yAxis);
         console.log(this.data.singleItems);
-
     }
 
     start() {
@@ -83,7 +82,6 @@ export default class Business {
                     }
                 }
             }
-
 
             // 生成分母
             if (item.current > 5000000 && index === 0) {
@@ -179,8 +177,8 @@ export default class Business {
                 background: this.gradient[i],
                 y: -y
             });
-
         }
+
         return yAxis;
     }
 
@@ -283,13 +281,19 @@ export default class Business {
                     this.updateRank(count);
                 }, this.totalTime / 24 / this.updateNumber);
             }
-
         } else {
             this.currentHour++;
             if (this.currentHour <= 24) {
                 this.updateRank(this.updateNumber, true);
             } else {
                 console.timeEnd('计时结束');
+                console.log(this.data.singleItems)
+                $('.text').removeClass('text');
+                this.data.singleItems.forEach((val, idx) => {
+                    if (idx < 20) {
+                        $(`li[data-uid="${val.uid}"]`).find('.name p').text(val.nickname)
+                    }
+                })
             }
         }
     }
@@ -338,6 +342,5 @@ export default class Business {
         }, 1500)
 
     }
-
 
 }
