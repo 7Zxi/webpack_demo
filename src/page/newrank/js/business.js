@@ -5,7 +5,7 @@ export default class Business {
         this.data = data;
 
         // 动画持续总时间 单位ms
-        this.totalTime = 26000;
+        this.totalTime = 25000;
 
         // 每个时间段数据更新次数
         this.updateNumber = 30;
@@ -119,9 +119,15 @@ export default class Business {
                     width,
                     background,
                 });
-                $el.find('.number span').html(`${(item.current / 10000).toFixed(2)}`);
+                let n = parseInt(item.current / 100) / 100;
+                n = n.toString().split('.');
+                n[1] = n[1] ? n[1].padEnd(2, '0') : '00';
+                $el.find('.number span').html(`${n.join('.')}`);
                 if (item.current > 100000000) {
-                    $el.find('.number').html(`<span>${(item.current / 100000000).toFixed(4)}</span>亿`);
+                    let y = parseInt(item.current / 10000) / 10000;
+                    y = y.toString().split('.');
+                    y[1] = y[1] ? y[1].padEnd(4, '0') : '0000';
+                    $el.find('.number').html(`<span>${y.join('.')}</span>亿`);
                 }
             }
 
@@ -135,7 +141,7 @@ export default class Business {
     addAxis(number) {
         const $mark = $('.mark');
         let p = `突破${number / 10000}万`;
-        if (number > 100000000) {
+        if (number >= 100000000) {
             p = `突破${number / 100000000}亿`
         }
         const child = `<div class="show" data-number="${number}">
@@ -156,6 +162,9 @@ export default class Business {
 
         $.each($('.mark>.show'), (idx, axis) => {
             const number = parseInt($(axis).attr('data-number'));
+            if (idx === 0 && number > 30000000 && number < 100000000) {
+                $(axis).find('p').addClass('sleft')
+            }
             const left = (number / denominator * this.axisWidth).toFixed() + 'px';
             $(axis).css('left', left)
         })
@@ -287,7 +296,7 @@ export default class Business {
 
     // 设置当前时间
     setNowTime() {
-        const time = +new Date() - 24*60*60*1000;
+        const time = +new Date() - 24 * 60 * 60 * 1000;
         const year = new Date(time).getFullYear();
         const month = new Date(time).getMonth();
         const day = new Date(time).getDate();

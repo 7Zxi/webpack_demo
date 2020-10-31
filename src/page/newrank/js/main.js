@@ -214,8 +214,12 @@ window.onload = function(){
                     info.avatar = value.avater;
                     info.uid = value.uid;
                     info.current = 0;
-                    value.today.forEach(({sales_money}) => {
-                        info.period.push(sales_money)
+                    value.today.forEach(({sales_money}, index) => {
+                        if(index>0){
+                            info.period.push(sales_money - value.today[index-1].sales_money)
+                        }else{
+                            info.period.push(sales_money)
+                        }
                     });
                     if(info.uid === "96285518522"){
                         mock.singleItems.unshift(info);
