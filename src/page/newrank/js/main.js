@@ -234,7 +234,6 @@ window.onload = function(){
             loading($('img'), num => {
                 console.log('页面元素加载完毕');
                 business.start();
-                //num=== 100 && business.start();
             },true)
 
             console.log(mock)

@@ -138,6 +138,12 @@ export default class Business {
     // 添加轴线
     addAxis(number) {
         const $mark = $('.mark');
+        const $div = $mark.find('div:last-child');
+        const left = $mark.width() - parseInt($div.css('left'));
+        if (left <= 130) {
+            $div.find('p').addClass('sleft');
+        }
+
         let p = `突破${number / 10000}万`;
         if (number >= 100000000) {
             p = `突破${number / 100000000}亿`
@@ -146,23 +152,20 @@ export default class Business {
             <p>${p}</p>
         </div>`;
         $mark.append(child);
+
+        if ($mark.find('.show').length > 2) {
+            const $target = $mark.find('.show').eq(0);
+            $target.removeClass('show');
+            animateCSS($target[0], 'fadeOutLeft,faster', () => {
+                $target.remove();
+            })
+        }
     }
 
     // 实时切换轴线
     changeAxis(denominator) {
-        if ($('.mark .show').length > 2) {
-            const $target = $('.mark .show').eq(0);
-            $target.removeClass('show');
-            animateCSS($target[0], 'fadeOut,faster', () => {
-                $target.remove();
-            })
-        }
-
         $.each($('.mark>.show'), (idx, axis) => {
             const number = parseInt($(axis).attr('data-number'));
-            if (idx === 0 && number > 30000000 && number < 100000000) {
-                $(axis).find('p').addClass('sleft')
-            }
             const left = (number / denominator * this.axisWidth).toFixed() + 'px';
             $(axis).css('left', left)
         })
@@ -287,13 +290,13 @@ export default class Business {
                 this.updateRank(this.updateNumber, true);
             } else {
                 console.timeEnd('计时结束');
-                console.log(this.data.singleItems)
                 $('.text').removeClass('text');
                 this.data.singleItems.forEach((val, idx) => {
                     if (idx < 20) {
                         $(`li[data-uid="${val.uid}"]`).find('.name p').text(val.nickname)
                     }
                 })
+                $('.number').removeClass('scale')
             }
         }
     }
