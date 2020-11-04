@@ -195,6 +195,12 @@ if (id === '1') {
     $('.columnar-chart').removeClass('hide');
 }
 
+if(id === '2'){
+    $('.time,.alert-text').addClass('hide');
+    $('.mark').css('zIndex', 0);
+    $('.at').removeClass('hide');
+}
+
 window.onload = function () {
     $.ajax({
         type: 'POST',
@@ -225,7 +231,7 @@ window.onload = function () {
                             info.period.push(sales_money)
                         }
                     });
-                    info.total = value.total.pop().sales_money;
+                    info.total_sales = value.total.pop().sales_money;
                     if (info.uid === "96285518522") {
                         mock.singleItems.unshift(info);
                     } else {
@@ -236,11 +242,21 @@ window.onload = function () {
             console.log(mock)
 
             const business = new Business(mock);
+            const chartData = mock.singleItems.sort((a, b) => b.total_sales - a.total_sales).slice(0, 20);
+
             if (id === '1') {
                 business.setNowTime();
-                const chartData = mock.singleItems.sort((a, b) => b.total - a.total).slice(0, 20);
                 business.renderColumnarChart(chartData);
-            } else {
+            }
+            else if(id === '2'){
+                business.setNowTime();
+                business.yAxis = business.createPosition();
+                const {html} = business.getInitValue(chartData);
+                business.renderRankList(html, chartData, false);
+                business.renderRankNumber();
+                business.renderColumnarChart(chartData, 'vertical');
+            }
+            else {
                 business.init();
                 loading($('img'), num => {
                     console.log('页面元素加载完毕');

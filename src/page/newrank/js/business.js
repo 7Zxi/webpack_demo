@@ -72,10 +72,10 @@ export default class Business {
     }
 
     // 改变榜单排名位置
-    changeRankList() {
+    changeRankList(data = this.data.singleItems, bool = true) {
         // 当前用户的实时交易额
-        this.data.singleItems.sort((a, b) => b.current - a.current);
-        this.data.singleItems.forEach((item, index) => {
+        bool && data.sort((a, b) => b.current - a.current);
+        data.forEach((item, index) => {
             if (item.current > 0) {
                 // 添加轴线
                 if (this.axisPeriod.length > 0) {
@@ -151,7 +151,7 @@ export default class Business {
         if (number >= 100000000) {
             p = `突破${number / 100000000}亿`
         }
-        const child = `<div class="show" data-number="${number}">
+        const child = `<div class="show line" data-number="${number}">
             <p>${p}</p>
         </div>`;
         $mark.append(child);
@@ -188,10 +188,15 @@ export default class Business {
         return yAxis;
     }
 
-    renderRankList(html) {
+    renderRankList(html, data, bool = true) {
         $('.items').html(html);
-        this.changeRankList();
-        this.textAnimate();
+
+        if (bool) {
+            this.changeRankList();
+            this.textAnimate();
+        } else {
+            this.changeRankList(data, false);
+        }
     }
 
     renderRankNumber() {
@@ -210,10 +215,10 @@ export default class Business {
     }
 
     // 返回榜单单日最大交易额和榜单的列表dom
-    getInitValue() {
+    getInitValue(data = this.data.singleItems) {
         let totalArray = [], maxTransactionValue, html = '';
 
-        this.data.singleItems.forEach((item, index) => {
+        data.forEach((item, index) => {
             // 添加单人每日交易总金额
             let total = item.period.reduce((a, b) => a + b)
             this.data.singleItems[index].total = total;
@@ -349,63 +354,91 @@ export default class Business {
 
     }
 
-    renderYAxis(number) {
+    renderYAxis(number, type) {
         const unit = 10000000;
         const limit = 5; // 分成区间数
+        //this.totalSales = Math.ceil(Math.ceil(number / unit) / 5) * 5 * unit;
         this.totalSales = Math.ceil(number / unit) * unit;
         const average = this.totalSales / limit;
-        console.log(average)
         let y = 16, html = '', period = [0];
         for (let i = 1; i <= limit; i++) {
-            let number = parseInt(i * average / 1000000) / 100;
-            number = number.toString().split('.');
-            number[1] = number[1] ? number[1].padEnd(2, '0') : '00';
-            period.push(number.join('.'));
+            let number = parseInt(i * average / 10000000) / 10;
+            //number = number.toString().split('.');
+            //number[1] = number[1] ? number[1].padEnd(1, '0') : '0';
+            period.push(number);
         }
 
         while (y--) {
-            console.log(y, y % 3)
             let val = '';
             if ((y) % 3 === 0) {
                 if (y === 0) {
                     val = `<b>${period.pop()}</b>`;
                 } else {
-                    val = `<b>${period.pop()}</b>亿`;
+                    let num = period.pop()
+                    if (num < 1) {
+                        val = `<b>${num * 10000}</b>万`;
+                    } else {
+                        val = `<b>${num}</b>亿`;
+                    }
                 }
             }
-
-            html += `<li>
-                <div class="l">${val}</div>
-                <div class="r"></div>
-            </li>`
+            if (type === 'vertical') {
+                let left = y * 44;
+                html += `<div class="axis" style="left:${left}px">
+                    <p>${val}</p>
+                    <div class="col"></div>
+                </div>`;
+            } else {
+                html += `<li>
+                    <div class="l">${val}</div>
+                    <div class="r"></div>
+                </li>`;
+            }
         }
-        $('.yAxis').html(html);
+        type === 'vertical' ? $('.mark').html(html) : $('.yAxis').html(html);
     }
 
-    renderXAxis(data) {
+    renderXAxis(data, type) {
         let html = '',
             background = ['#d10e9d', '#d41299', '#d71794', '#db1c8e', '#dd208b', '#e02387', '#e32882', '#e62c7e', '#e93178', '#ed3674', '#f03b6e', '#f23e6b', '#f64366', '#f84762', '#fc4c5d', '#ff5058', '#ff5058', '#ff5058', '#ff5058', '#ff5058'];
-        const height = $('.yAxis').height() - 40;
-        data.forEach((list, idx) => {
-            let number = parseInt(list.total / 1000000) / 100;
-            number = number.toString().split('.');
-            number[1] = number[1] ? number[1].padEnd(2, '0') : '00';
-            html += `<li>
+        if (type === 'vertical') {
+            $.each($('.items li'), (idx, val) => {
+                console.log(data[idx].total_sales)
+                let number = parseInt(data[idx].total_sales / 1000000) / 100;
+                number = number.toString().split('.');
+                number[1] = number[1] ? number[1].padEnd(2, '0') : '00';
+                $(val).find('.range').css({
+                    background: background[idx],
+                    width: `${data[idx].total_sales / this.totalSales * this.axisWidth}px`
+                }).end().find('.number').html(`<span>${number.join('.')}</span>亿`);
+            })
+        } else {
+            const height = $('.yAxis').height() - 40;
+            data.forEach((list, idx) => {
+                let number = parseInt(list.total_sales / 1000000) / 100;
+                number = number.toString().split('.');
+                number[1] = number[1] ? number[1].padEnd(2, '0') : '00';
+                html += `<li>
                 <div class="value"><span>${number.join('.')}</span>亿</div>
-                <div class="bar" style="background:${background[idx]};height:${list.total / this.totalSales * height}px"></div>
+                <div class="bar" style="background:${background[idx]};height:${list.total_sales / this.totalSales * height}px"></div>
                 <div class="user">
                     <img src="${list.avatar}">
                     <div><p>${list.nickname}</p></div>
                 </div>
             </li>`
-        });
-        $('.xAxis').html(html)
+            });
+            $('.xAxis').html(html)
+        }
     }
 
-    renderColumnarChart(data) {
-        this.renderYAxis(data[0].total);
-        this.renderXAxis(data);
-        console.log(data);
+    renderColumnarChart(data, type) {
+        if (type === 'vertical') {
+            this.renderYAxis(data[0].total_sales, type);
+            this.renderXAxis(data, type);
+        } else {
+            this.renderYAxis(data[0].total_sales);
+            this.renderXAxis(data);
+        }
     }
 
 }

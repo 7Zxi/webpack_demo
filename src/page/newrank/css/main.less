@@ -32,7 +32,18 @@ body,html {
     }
   }
 
-
+  .at{
+    position: absolute;
+    top: 118px;
+    left: 0;
+    width: 235px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+    letter-spacing: 1px;
+  }
   .mark{
     position: absolute;
     z-index:9;
@@ -55,6 +66,8 @@ body,html {
       top:0;
       //transition: all .15s linear;
       left:677px;
+    }
+    .line{
       p{
         height:30px;
         line-height:30px;
@@ -65,9 +78,33 @@ body,html {
         transition: all .3s ease-in;
         &.sleft{
           transform: translateX(-130px);
-
         }
       }
+    }
+    .axis{
+      border:none;
+      width:44px;
+      left:0;
+      text-align: center;
+      p{
+        height:30px;
+        width:100px;
+        color:#B4B4B4;
+        font-size:16px;
+        transform: translateX(-41%);
+        b{
+          color:#FF7909;
+          font-size:20px;
+        }
+      }
+      .col{
+        width:1px;
+        background:#2D2C31;
+        height:830px
+      }
+    }
+    .axis+.axis{
+
     }
 
 
@@ -104,6 +141,14 @@ body,html {
           display: block;
         }
       }
+    }
+    .line{
+      height: 1px;
+      background:#2D2C31;
+      position: absolute;
+      top: 12px;
+      left: 20px;
+      right: 20px;
     }
 
     .items{
