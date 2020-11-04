@@ -32,12 +32,13 @@ body,html {
     }
   }
 
+
   .mark{
     position: absolute;
     z-index:9;
     top:132px;
     left:229px;
-    width:652px;
+    width:661px;
     height:871px;
     pointer-events: none;
     font-family: "alibaba";
@@ -52,7 +53,7 @@ body,html {
       border-left:1px solid #2D2C31;
       letter-spacing: 3px;
       top:0;
-      transition: all .15s linear;
+      //transition: all .15s linear;
       left:677px;
       p{
         height:30px;
@@ -175,7 +176,7 @@ body,html {
             }
           }
           .insert-box{
-            width:200px;
+            width:185px;
             height:34px;
             margin-left:-15px;
             display: flex;
@@ -266,6 +267,119 @@ body,html {
       color:#FF7909;
       margin:0 1px;
       line-height:38px;
+    }
+  }
+
+  .columnar-chart{
+    width:100%;
+    height:897px;
+    position: relative;
+    font-family: alibaba;
+    padding-top:25px;
+    .title{
+      width:400px;
+      height:60px;
+      line-height:60px;
+      background:#2D2C31;
+      margin:0 auto ;
+      font-size:26px;
+      color:#fff;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .yAxis{
+      position: absolute;
+      width:100%;
+      height:640px;
+      top:80px;
+      left:0;
+      li{
+        display: flex;
+        height:40px;
+        align-items: flex-end;
+        .l{
+          width:90px;
+          text-align: right;
+          padding-right:10px;
+          color:#B4B4B4;
+          font-size:16px;
+          line-height:0;
+          b{
+            color:#FF7909;
+            font-size:20px;
+            margin-right:3px;
+          }
+        }
+        .r{
+          width:950px;
+          border-bottom:1px solid #2D2C31;
+        }
+        &:last-child{
+          .l{
+            line-height:20px;
+          }
+        }
+      }
+    }
+    .xAxis{
+      position: absolute;
+      top:120px;
+      left:90px;
+      width:950px;
+      height:600px;
+      border-left:1px solid #2D2C31;
+      padding-left:20px;
+      li{
+        width:46px;
+        height:765px;
+        float:left;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        .value{
+          color:#B4B4B4;
+          font-size:12px;
+          span{
+            color:#fff;
+          }
+        }
+        .bar{
+          width:34px;
+          border-top-left-radius: 18px;
+          border-top-right-radius: 18px;
+          background:#ff5058;
+          margin-top:5px;
+        }
+        .user{
+          width:34px;
+          height:150px;
+          margin-top:15px;
+          border-top-left-radius: 18px;
+          border-top-right-radius: 18px;
+          overflow: hidden;
+          img{
+            width:100%;
+            display: block;
+            border-radius: 100%;
+          }
+          div{
+            height:133px;
+            margin-top:-18px;
+            background:#2E2D32;
+            padding-top:25px;
+            p{
+              padding:0 10px;
+              font-size:16px;
+              color:#fff;
+              line-height:24px;
+              overflow: hidden;
+              height:100px;
+            }
+          }
+
+        }
+      }
     }
   }
 

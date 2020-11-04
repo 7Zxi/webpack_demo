@@ -33,6 +33,9 @@ export default class Business {
 
         this.maxShadowWidth = this.axisWidth * .65;
 
+        // 最大交易总额
+        this.totalSales = 0;
+
     }
 
     init() {
@@ -344,6 +347,65 @@ export default class Business {
             });
         }, 1500)
 
+    }
+
+    renderYAxis(number) {
+        const unit = 10000000;
+        const limit = 5; // 分成区间数
+        this.totalSales = Math.ceil(number / unit) * unit;
+        const average = this.totalSales / limit;
+        console.log(average)
+        let y = 16, html = '', period = [0];
+        for (let i = 1; i <= limit; i++) {
+            let number = parseInt(i * average / 1000000) / 100;
+            number = number.toString().split('.');
+            number[1] = number[1] ? number[1].padEnd(2, '0') : '00';
+            period.push(number.join('.'));
+        }
+
+        while (y--) {
+            console.log(y, y % 3)
+            let val = '';
+            if ((y) % 3 === 0) {
+                if (y === 0) {
+                    val = `<b>${period.pop()}</b>`;
+                } else {
+                    val = `<b>${period.pop()}</b>亿`;
+                }
+            }
+
+            html += `<li>
+                <div class="l">${val}</div>
+                <div class="r"></div>
+            </li>`
+        }
+        $('.yAxis').html(html);
+    }
+
+    renderXAxis(data) {
+        let html = '',
+            background = ['#d10e9d', '#d41299', '#d71794', '#db1c8e', '#dd208b', '#e02387', '#e32882', '#e62c7e', '#e93178', '#ed3674', '#f03b6e', '#f23e6b', '#f64366', '#f84762', '#fc4c5d', '#ff5058', '#ff5058', '#ff5058', '#ff5058', '#ff5058'];
+        const height = $('.yAxis').height() - 40;
+        data.forEach((list, idx) => {
+            let number = parseInt(list.total / 1000000) / 100;
+            number = number.toString().split('.');
+            number[1] = number[1] ? number[1].padEnd(2, '0') : '00';
+            html += `<li>
+                <div class="value"><span>${number.join('.')}</span>亿</div>
+                <div class="bar" style="background:${background[idx]};height:${list.total / this.totalSales * height}px"></div>
+                <div class="user">
+                    <img src="${list.avatar}">
+                    <div><p>${list.nickname}</p></div>
+                </div>
+            </li>`
+        });
+        $('.xAxis').html(html)
+    }
+
+    renderColumnarChart(data) {
+        this.renderYAxis(data[0].total);
+        this.renderXAxis(data);
+        console.log(data);
     }
 
 }
