@@ -36,6 +36,8 @@ export default class Business {
         // 最大交易总额
         this.totalSales = 0;
 
+        this.maxHour = data.singleItems[0].period.length || 24;
+
     }
 
     init() {
@@ -102,7 +104,7 @@ export default class Business {
             // range样式插入
             const $el = $(`li[data-uid="${item.uid}"]`);
             $el.attr('data-index', index).css('transform', `translateY(${y}px)`);
-            if (index < 22) {
+            if (index < 21) {
                 this.changeAxis(this.maxTransactionValue);
                 const width = `${(item.current / this.maxTransactionValue * this.axisWidth).toFixed()}px`;
                 let prevIndex = $el.attr('data-index');
@@ -120,19 +122,19 @@ export default class Business {
                     width,
                     background,
                 });
-                let n = parseInt(item.current / 100) / 100;
+                let n = parseInt(Number(item.current.toFixed()) / 100) / 100;
                 n = n.toString().split('.');
                 n[1] = n[1] ? n[1].padEnd(2, '0') : '00';
                 $el.find('.number span').html(`${n.join('.')}`);
-                if (item.current > 100000000) {
-                    let y = parseInt(item.current / 10000) / 10000;
+                if (Number(item.current.toFixed()) > 100000000) {
+                    let y = parseInt(Number(item.current.toFixed()) / 10000) / 10000;
                     y = y.toString().split('.');
                     y[1] = y[1] ? y[1].padEnd(4, '0') : '0000';
                     $el.find('.number').html(`<span>${y.join('.')}</span>亿`);
                 }
             }
 
-            if ((item.current / this.maxTransactionValue * this.axisWidth) >= this.maxShadowWidth && index === 14) {
+            if ((Number(item.current.toFixed()) / this.maxTransactionValue * this.axisWidth) >= this.maxShadowWidth && index === 14) {
                 this.maxTransactionValue *= 1.1;
             }
         })
@@ -290,21 +292,34 @@ export default class Business {
                     this.changeRankListCurrent();
                     count--;
                     this.updateRank(count);
-                }, this.totalTime / 24 / this.updateNumber);
+                }, 35 || this.totalTime / 24 / this.updateNumber);
             }
         } else {
             this.currentHour++;
-            if (this.currentHour <= 24) {
+            if (this.currentHour <= this.maxHour) {
                 this.updateRank(this.updateNumber, true);
             } else {
                 console.timeEnd('计时结束');
                 $('.text').removeClass('text');
                 this.data.singleItems.forEach((val, idx) => {
                     if (idx < 20) {
-                        $(`li[data-uid="${val.uid}"]`).find('.name p').text(val.nickname)
+                        const $el = $(`li[data-uid="${val.uid}"]`);
+                        $el.find('.name p').text(val.nickname);
+
+                        let n = parseInt(val.total / 100) / 100;
+                        n = n.toString().split('.');
+                        n[1] = n[1] ? n[1].padEnd(2, '0') : '00';
+                        $el.find('.number span').html(`${n.join('.')}`);
+                        if (val.total > 100000000) {
+                            let y = parseInt(val.total / 10000) / 10000;
+                            y = y.toString().split('.');
+                            y[1] = y[1] ? y[1].padEnd(4, '0') : '0000';
+                            $el.find('.number').html(`<span>${y.join('.')}</span>亿`);
+                        }
                     }
                 })
-                $('.number').removeClass('scale')
+
+
             }
         }
     }
@@ -357,17 +372,20 @@ export default class Business {
     renderYAxis(number, type) {
         const unit = 10000000;
         const limit = 5; // 分成区间数
-        //this.totalSales = Math.ceil(Math.ceil(number / unit) / 5) * 5 * unit;
         this.totalSales = Math.ceil(number / unit) * unit;
         const average = this.totalSales / limit;
         let y = 16, html = '', period = [0];
         for (let i = 1; i <= limit; i++) {
-            let number = parseInt(i * average / 10000000) / 10;
-            //number = number.toString().split('.');
-            //number[1] = number[1] ? number[1].padEnd(1, '0') : '0';
+            const current = i * average;
+            let number = 0;
+            if(current>=100000000){
+                number = parseInt(i * average / unit) / 10;
+            }else{
+                number = parseInt(i * average / 1000000) / 100;
+            }
             period.push(number);
         }
-
+        console.log(period)
         while (y--) {
             let val = '';
             if ((y) % 3 === 0) {

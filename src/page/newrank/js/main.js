@@ -197,8 +197,8 @@ if (id === '1') {
 
 if(id === '2'){
     $('.time,.alert-text').addClass('hide');
-    $('.mark').css('zIndex', 0);
-    $('.at').removeClass('hide');
+    //$('.mark').css('zIndex', 0);
+    //$('.at').removeClass('hide');
 }
 
 window.onload = function () {
@@ -224,13 +224,20 @@ window.onload = function () {
                     info.avatar = value.avater;
                     info.uid = value.uid;
                     info.current = 0;
-                    value.today.forEach(({sales_money}, index) => {
-                        if (index > 0) {
-                            info.period.push(sales_money - value.today[index - 1].sales_money)
-                        } else {
+                    if(id === '2'){
+                        value.toatal_daily.forEach(({sales_money}) => {
                             info.period.push(sales_money)
-                        }
-                    });
+                        })
+                    }else{
+                        value.today.forEach(({sales_money}, index) => {
+                            if (index > 0) {
+                                info.period.push(sales_money - value.today[index - 1].sales_money)
+                            } else {
+                                info.period.push(sales_money)
+                            }
+                        });
+                    }
+
                     info.total_sales = value.total.pop().sales_money;
                     if (info.uid === "96285518522") {
                         mock.singleItems.unshift(info);
@@ -240,22 +247,28 @@ window.onload = function () {
                 })
             }
             console.log(mock)
-
-            const business = new Business(mock);
             const chartData = mock.singleItems.sort((a, b) => b.total_sales - a.total_sales).slice(0, 20);
+
+            /*if(id === '2'){
+                mock.singleItems = chartData;
+            }*/
+            const business = new Business(mock);
+            if(id === '2'){
+                business.gradient = ['#d10e9d', '#d41299', '#d71794', '#db1c8e', '#dd208b', '#e02387', '#e32882', '#e62c7e', '#e93178', '#ed3674', '#f03b6e', '#f23e6b', '#f64366', '#f84762', '#fc4c5d', '#ff5058', '#ff5058', '#ff5058', '#ff5058', '#ff5058'];
+            }
 
             if (id === '1') {
                 business.setNowTime();
                 business.renderColumnarChart(chartData);
             }
-            else if(id === '2'){
-                business.setNowTime();
+            /*else if(id === '2'){
+                /!*business.setNowTime();
                 business.yAxis = business.createPosition();
                 const {html} = business.getInitValue(chartData);
                 business.renderRankList(html, chartData, false);
                 business.renderRankNumber();
-                business.renderColumnarChart(chartData, 'vertical');
-            }
+                business.renderColumnarChart(chartData, 'vertical');*!/
+            }*/
             else {
                 business.init();
                 loading($('img'), num => {
