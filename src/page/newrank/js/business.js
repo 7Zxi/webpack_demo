@@ -144,8 +144,8 @@ export default class Business {
     addAxis(number) {
         const $mark = $('.mark');
         const $div = $mark.find('div:last-child');
-        const left = $mark.width() - parseInt($div.css('left'));
-        if (left <= 130) {
+        const left = this.axisWidth - parseInt($div.css('left'));
+        if (left <= 140) {
             $div.find('p').addClass('sleft');
         }
 

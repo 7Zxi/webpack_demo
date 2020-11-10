@@ -202,6 +202,10 @@ if(id === '2'){
 }
 
 window.onload = function () {
+    const $video = $('video');
+    $video.click(()=>{
+        $video[0].play();
+    })
     $.ajax({
         type: 'POST',
         url: 'https://capi.newrank.cn/api/custom/double11/xd_live',

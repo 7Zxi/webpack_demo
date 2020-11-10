@@ -19,10 +19,12 @@ body,html {
   display: none;
 }
 
+
+
 .container{
   width:1080px;
   height:1080px;
-  background:#1F1E23;
+  background : linear-gradient(0deg, rgba(28, 32, 76, 1) 0%, rgba(21, 25, 67, 1) 45.7%, rgba(28, 32, 44, 1) 100%);
   margin:0 auto;
   position: relative;
   .head{
@@ -30,6 +32,14 @@ body,html {
       display: block;
       width:100%;
     }
+  }
+  video{
+    position: absolute;
+    top:0;
+    left:0;
+    width:1080px;
+    height:1080px;
+    display: block;
   }
 
   .at{
@@ -49,10 +59,10 @@ body,html {
   .mark{
     position: absolute;
     z-index:9;
-    top:132px;
-    left:229px;
+    top:111px;
+    left:234px;
     width:661px;
-    height:871px;
+    height:885px;
     pointer-events: none;
     font-family: "alibaba";
     //overflow: hidden;
@@ -63,7 +73,7 @@ body,html {
       line-height:30px;
       font-size:16px;
       color:#fff;
-      border-left:1px solid #2D2C31;
+      border-left:2px solid #363d60;
       letter-spacing: 3px;
       top:0;
       //transition: all .15s linear;
@@ -72,14 +82,16 @@ body,html {
     .line{
       p{
         height:30px;
-        line-height:30px;
-        background:#FF7909;
+        line-height:26px;
+        background:#181d2f;
         padding:0 5px;
         text-align: center;
         width:100%;
         transition: all .3s ease-in;
+        border:2px solid #31479E;
+        margin-left:-2px;
         &.sleft{
-          transform: translateX(-130px);
+          transform: translateX(-126px);
         }
       }
     }
@@ -115,17 +127,19 @@ body,html {
   .rank{
     width:100%;
     height:860px;
-    margin-top: 27px;
+    margin-top: 20px;
     margin-bottom: 10px;
     position:relative;
     .rank-number{
       padding-top:14px;
+      font-family: alibaba;
+      font-style: italic;
       >div{
         position:relative;
         margin-left:20px;
         width:1040px;
         height:42px;
-        border-bottom:1px solid #3a3a3e;
+        //border-bottom:1px solid #3a3a3e;
         color:#FAAD1F;
         font-weight:bold;
         font-size:16px;
@@ -138,8 +152,8 @@ body,html {
           text-align: center;
         }
         >img{
-          height:34px;
-          margin-left:14px;
+          height:23px;
+          margin-left:20px;
           display: block;
         }
       }
@@ -172,10 +186,10 @@ body,html {
 
         .name{
           width:140px;
-          margin-right:5px;
+          margin-right:10px;
           line-height:34px;
           height:34px;
-          background:#2E2D32;
+          background:#0C0F16;
           text-align: center;
           color:#fff;
           letter-spacing: 1px;
@@ -211,8 +225,8 @@ body,html {
             height:34px;
             width:0;
             transition: all .2s linear;
-            border-bottom-right-radius: 17px;
-            border-top-right-radius: 17px;
+            //border-bottom-right-radius: 17px;
+            //border-top-right-radius: 17px;
 
             img{
               width:34px;
@@ -248,7 +262,7 @@ body,html {
                 }
               }
             }
-            &.up{
+            /*&.up{
               background:url(../image/up.png) no-repeat center left;
               color:#F8AE1F;
               .show-up{
@@ -261,14 +275,19 @@ body,html {
               .show-down{
                 display: block;
               }
-            }
+            }*/
             .number{
               margin-right:10px;
               transition: transform .3s ease;
+              padding:0 15px;
+              border: 2px solid #31479E;
+              background:#181d2f;
+              border-radius:4px;
               span{
                 color:#fff;
                 font-weight:bold;
                 font-size:18px;
+                line-height:32px;
                 margin-right:2px;
               }
               color:#B4B4B4;
@@ -284,8 +303,8 @@ body,html {
     position:absolute;
     z-index:10;
     right:40px;
-    bottom:77px;
-    color:#b3b3b3;
+    bottom:98px;
+    color:#fff;
     letter-spacing: 1px;
     span{
       color:#FF7909;
@@ -294,21 +313,23 @@ body,html {
   .time{
     width:240px;
     height:50px;
-    background:#3a3a3e;
+    border:2px solid #367cd3;
     position:absolute;
     z-index:10;
     right:40px;
-    bottom:118px;
+    bottom:135px;
     text-align: center;
     color:#fff;
     font-size:22px;
     letter-spacing: 1px;
+    font-family: alibaba;
     >div{
-      width:220px;
-      height:38px;
-      margin:6px 10px;
-      border-radius:4px;
-      background:#2b2b2e;
+      //width:220px;
+      //height:38px;
+      //margin:6px 10px;
+      line-height:46px;
+      //border-radius:4px;
+      background:#0C0F16;
     }
     span{
       color:#FF7909;
