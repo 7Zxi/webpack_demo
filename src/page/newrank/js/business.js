@@ -1,4 +1,5 @@
-const {animateCSS} = __publicMethod;
+const {animateCSS, getURLParams} = __publicMethod;
+const id = getURLParams('search').id;
 export default class Business {
     constructor(data = {}) {
         // 格式化后数据
@@ -92,13 +93,16 @@ export default class Business {
             if (item.current > 5000000 && index === 0) {
                 this.maxTransactionValue = item.current;
             }
+
             let y, background;
             if (index >= this.maxShowRank) {
                 y = 0;
-                background = "#FF7909";
+
+                id !== '3' && (background = "#FF7909");
+                id === '2' && (background = "#ff5058");
             } else {
                 y = this.yAxis[index].y;
-                background = this.yAxis[index].background;
+                id !== '3' && (background = this.yAxis[index].background);
             }
 
             // range样式插入
@@ -192,7 +196,13 @@ export default class Business {
 
     renderRankList(html, data, bool = true) {
         $('.items').html(html);
-
+        if(id === '3'){
+            $('.range').css({
+                'minWidth': '34px',
+                'borderBottomRightRadius': '6px',
+                'borderTopRightRadius': '6px',
+            });
+        }
         if (bool) {
             this.changeRankList();
             this.textAnimate();
@@ -236,13 +246,17 @@ export default class Business {
             // 生成排行榜列表list
             item.nickname = item.nickname.replace(/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g, "");
             item.nickname.length > 6 && (item.nickname += ' ');
+            let rangeChild = '';
+            if(id === '3'){
+                rangeChild = `<img src="${require(`../image/${item.source}.png`)}">`
+            }
             html += `<li data-uid="${item.uid}">
                 <div class="name">
                     <img src="${item.avatar}">
                     <p class="${item.nickname.length > 6 ? 'text' : ''}">${item.nickname}</p>
                 </div>
                 <div class="range-box">
-                    <div class="range"></div>
+                    <div class="range ${item.source}">${rangeChild}</div>
                     <div class="insert-box">
                         <div class="number"><span>${item.current}</span>万</div>
                         <div class="show-up">
@@ -272,7 +286,7 @@ export default class Business {
     // 改变榜单的current值
     changeRankListCurrent() {
         this.data.singleItems.forEach(list => {
-            list.current += list.average[this.currentHour - 1];
+            list.current += list.average[this.currentHour - 1] || 0;
         });
         this.changeRankList();
     }
@@ -421,7 +435,6 @@ export default class Business {
             background = ['#d10e9d', '#d41299', '#d71794', '#db1c8e', '#dd208b', '#e02387', '#e32882', '#e62c7e', '#e93178', '#ed3674', '#f03b6e', '#f23e6b', '#f64366', '#f84762', '#fc4c5d', '#ff5058', '#ff5058', '#ff5058', '#ff5058', '#ff5058'];
         if (type === 'vertical') {
             $.each($('.items li'), (idx, val) => {
-                console.log(data[idx].total_sales)
                 let number = parseInt(data[idx].total_sales / 1000000) / 100;
                 number = number.toString().split('.');
                 number[1] = number[1] ? number[1].padEnd(2, '0') : '00';

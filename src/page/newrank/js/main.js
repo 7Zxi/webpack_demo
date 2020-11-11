@@ -195,15 +195,18 @@ if (id === '1') {
     $('.columnar-chart').removeClass('hide');
 }
 
-if(id === '2'){
+if (id === '2') {
     $('.time,.alert-text').addClass('hide');
     //$('.mark').css('zIndex', 0);
     //$('.at').removeClass('hide');
 }
+if (id === '3'){
+    $('.time,.alert-text').addClass('hide');
+}
 
 window.onload = function () {
     const $video = $('video');
-    $video.click(()=>{
+    $video.click(() => {
         $video[0].play();
     })
     $.ajax({
@@ -220,19 +223,24 @@ window.onload = function () {
 
             if (Array.isArray(data.data)) {
                 data.data.forEach(value => {
+                    if (value.source !== 'dy' && id !== '3') return;
                     let info = {
                         period: []
                     };
+                    if(value.uid === "104310207374"){
+                        console.log(value)
+                    }
 
                     info.nickname = value.nickname;
                     info.avatar = value.avater;
                     info.uid = value.uid;
+                    info.source = value.source;
                     info.current = 0;
-                    if(id === '2'){
+                    if (id === '2' || id === '3') {
                         value.toatal_daily.forEach(({sales_money}) => {
                             info.period.push(sales_money)
                         })
-                    }else{
+                    } else {
                         value.today.forEach(({sales_money}, index) => {
                             if (index > 0) {
                                 info.period.push(sales_money - value.today[index - 1].sales_money)
@@ -241,8 +249,13 @@ window.onload = function () {
                             }
                         });
                     }
+                    if (id === '3') {
+                        info.total_sales = info.period.reduce((a, b) => a + b);
+                        //console.log(info.total_sales, info)
+                    } else {
+                        info.total_sales = value.total.pop().sales_money;
+                    }
 
-                    info.total_sales = value.total.pop().sales_money;
                     if (info.uid === "96285518522") {
                         mock.singleItems.unshift(info);
                     } else {
@@ -257,7 +270,7 @@ window.onload = function () {
                 mock.singleItems = chartData;
             }*/
             const business = new Business(mock);
-            if(id === '2'){
+            if (id === '2') {
                 business.gradient = ['#d10e9d', '#d41299', '#d71794', '#db1c8e', '#dd208b', '#e02387', '#e32882', '#e62c7e', '#e93178', '#ed3674', '#f03b6e', '#f23e6b', '#f64366', '#f84762', '#fc4c5d', '#ff5058', '#ff5058', '#ff5058', '#ff5058', '#ff5058'];
             }
 
