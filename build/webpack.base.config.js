@@ -29,7 +29,29 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(css|less)$/,
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,//还需要在plugins里面new一下
+                        options: {
+                            publicPath: '../' //为了解决css里面引入的图片和img标签引入图片路径冲突问题
+                        }
+                    },
+                    {
+                        loader: "css-loader"
+                    },
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            plugins: [
+                                require("autoprefixer") /*添加css3前缀*/
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.less$/,
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader,//还需要在plugins里面new一下
