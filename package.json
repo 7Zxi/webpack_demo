@@ -5,6 +5,7 @@
     "@babel/runtime-corejs3": "^7.11.2",
     "dotenv": "^8.2.0",
     "jquery": "^3.5.1",
+    "pixi.js": "^6.2.2",
     "zepto": "^1.2.0"
   },
   "devDependencies": {
@@ -18,7 +19,7 @@
     "css-hot-loader": "^1.4.4",
     "css-loader": "^3.6.0",
     "file-loader": "^4.3.0",
-    "fs": "0.0.1-security",
+    "fs": "^0.0.1-security",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "html-withimg-loader": "^0.1.16",
